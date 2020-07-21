@@ -1,0 +1,17 @@
+SELECT EmpName,Salary
+FROM
+(
+	SELECT A.EmpID,A.EmpName,A.Date_of_Birth,B.Salary,
+	Dense_Rank(Order By B.Salary DESC) AS Salary_Rank
+	FROM Employee A
+	INNER JOIN Salary B
+	ON A.EmpID=B.EmpID
+)
+WHERE Salary_Rank=10
+
+
+-------------------------------------------------------------------------
+-------------------------------------------------------------------------
+
+UPDATE Salary SET Salary=5000 WHERE EmpID IN 
+(SELECT EmpID FROM Employee WHERE (DATEDIFF(CURRENT_DATE,Date_of_Birth)/365)>=30)

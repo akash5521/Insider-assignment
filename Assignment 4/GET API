@@ -1,0 +1,118 @@
+
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+import org.testng.annotations.*;
+
+import com.google.common.io.Resources;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.List;
+import java.util.Set;
+import java.util.Date;
+import java.io.FileOutputStream;
+import java.io.File;
+
+
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
+
+public class Insider {
+    private Insider()
+    {
+        System.out.println("\nTest Started!\n");
+    }
+    Properties prop = new Properties();
+
+    @BeforeTest
+    public void load_bases()
+            throws IOException
+    {
+        String cur_path = System.getProperty("user.dir");
+        System.out.println(cur_path);
+        FileInputStream fis = new FileInputStream(cur_path + "/src/Repeatables/bases.prop");
+        prop.load(fis);
+    }
+
+    @Test
+    public void test1()
+    {
+        boolean unique_code = true;
+        boolean jpg_poster = true;
+        boolean are_all_release_dates_later = true;
+        boolean one_language=true;
+        String movies_resource = Resources.movie();
+        RestAssured.baseURI=prop.getProperty("BASE_URL");
+        Response response_movies=given().
+                when().
+                get(movies_resource).
+                then().statusCode(200).
+                contentType("application/json").
+                body("upcomingMovieData",notNullValue()).
+                extract().response();
+        
+
+        List <String> release_dates = response_movies.jsonPath().getList("upcomingMovieData.releaseDate");
+        List <String> posters_url = response_movies.jsonPath().getList("upcomingMovieData.moviePosterUrl");
+        List <String> movie_codes = response_movies.jsonPath().getList("upcomingMovieData.paytmMovieCode");
+        List <String> languages = response_movies.jsonPath().getList("upcomingMovieData.language");
+        List <Integer> is_content_available = response_movies.jsonPath().getList("upcomingMovieData.isContentAvailable");
+        List <String> movie_names = response_movies.jsonPath().getList("upcomingMovieData.provider_moviename");
+
+        // Validating if movie codes is unique
+        
+        Set movie_code_set = new HashSet(movie_codes);
+        if(movie_code_set.size() < movie_codes.size())
+        {
+        	unique_code = false;
+        }
+
+        //Validating if poster URL JPG images 
+        
+        for(int i = 0; i < posters_url.size(); ++i)
+        {
+            if(posters_url.get(i) == null)
+            {
+            	jpg_poster = false;
+                break;
+            }
+            else if(!posters_url.get(i).contains(".jpg"))
+            {
+            	jpg_poster = false;
+                break;
+            }
+        }
+
+        //Validating release dates are greater than today
+        
+        SimpleDateFormat date_formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        String date_today = date_formatter.format(date);
+        for(String resp_date : release_dates)
+        {
+            if(resp_date == null)
+            {
+                are_all_release_dates_later = false;
+                System.out.println("\n\nNull in release date found\n\n");
+                break;
+            }
+            else if(resp_date.compareTo(date_today) <= 0)
+            {
+                are_all_release_dates_later = false;
+                break;
+            }
+        }
+
+        //Checking if there are multiple language keys in the response
+        if(!unique_code || (languages.size() != movie_codes.size()))
+        {
+        	one_language = false;
+        }
+
+    }       
+}

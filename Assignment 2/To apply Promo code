@@ -1,0 +1,39 @@
+Question - 
+Write all the possible test scenarios “To apply Promo code”. Promo code will give a
+discount of 30% (on the total billing amount) to the new user once applied on a
+minimum transaction of Rs. 1000 and above. Below are some specifications for the
+promo code:
+Promo: NEW30
+Character limit: 7
+Maximum cap: Rs. 300
+* Make any possible assumptions if required. Do mention those assumptions (if
+made any) before writing the test scenarios.
+** Write all positive, negative and edge case scenarios.
+
+
+Test scenarios
+
+1- Cart should be  1001 , and then applying the promocode. Promocode should be sucessfully applied
+2- Cart should be exactly 1000 , and then applying the promocode. Promocode should be sucessfully applied
+3- Cart should be  999 , and then applying the promocode. Promocode should not be sucessfully applied
+4- Make cart amount as 5000 (30% discount should be applicable in 5000)
+5-Make cart amount as 500 (30% discount should not be applicable in 500)
+6- Sucessfully apply promocode (NEW30) once and again try to use same promocode. Promocode should not be applicable
+7- If a different promocode is applied after the usage of 'NEW30', 30% discount wont be applicable and calculation will be done based on Applied promocode
+8- After applying the promocode (NEW30), Mark the transaction as failure by entering incorrect CVV. Try to apply promocode again, Promocode should be applicable 
+9- After applying the promocode (NEW30), Mark the transaction as sucess . Try to apply promocode again, Promocode should not be applicable 
+10- After applying the promocode (NEW30), Kill the application again launch app and apply promocode Promocode should be applicable
+11- Login with same username in 2 different devices, and apply promo code in both the devices , should get error 
+12- Promo code should get cleared when we make the cart emplty
+13- If user return the item then, the amount should be adjusted with the NEW30 promo code applied (say refund amount was 100, So only 70 should be sent to bank)
+14- Using promocode NEW30 gives sucess 
+15- Use promocode WEE30 gives failure 
+16- Use 7 character in promocode NEWW200 should give sucess
+17- Use 8 character in promocode NEWW2000 should give failure
+18- Use Lower case new30 should give sucess
+19- Put space between promocode (NEW 30) should give error
+20- Provide blank spaces (_____) should give error message 
+21- Using non-ASCII characters should give error message 
+
+
+

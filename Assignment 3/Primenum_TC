@@ -1,0 +1,17 @@
+# Assignment 3 ( Part 2)
+
+Test scenarios
+
+1- Should accept only digits.
+2- Should not accept more than 5 digits 
+3-  Entering 1 should give an error 
+4- Entering even number should give an error 
+5- Entering String should give error 
+6-Entering Char should give error 
+7-Entering Boolean  should give error 
+8- After running the program stop the process in between, enter some random value should give an error 
+9- Forcefull kill the editor, program should not run
+10- Running the program from the terminal, program should work
+11- Saving the program with wrong extension (.java ---> .exe) and run the program should give an error
+12- Shut down the system after running the program 
+13- Should not accept decimal values 
